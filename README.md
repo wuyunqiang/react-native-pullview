@@ -2,6 +2,8 @@
 scrollview&amp;&amp;FlatList Pull refresh and loadmore
 
 参考react-native-pull和react-native-refreshable-flatlist。
+效果图：
+ ![image](https://github.com/wuyunqiang/PullView/raw/master/Image/pullview.gif)
 
 使用方式直接拷贝到文件目录下，导入组件即可：
 pulllist=>使用flatlist
