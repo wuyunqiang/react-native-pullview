@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import {
+    Platform,
     ScrollView,
 } from 'react-native';
 import Pullable from './Pullable';
@@ -51,6 +52,7 @@ export default class extends Pullable {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
         this.scrollToEnd = this.scrollToEnd.bind(this);
+        this.type='View';
     }
 
     scrollTo(...args) {
@@ -78,6 +80,7 @@ export default class extends Pullable {
                 ref={(c) => {this.scroll = c;}}
                 refreshControl={refreshControl}
                 onScroll={this.onScroll}
+                scrollEnabled={Platform.OS==='android'?this.state.scrollEnabled:true}
                 scrollEventThrottle={16}
                 onContentSizeChange = {this.onContentSizeChange}
             >

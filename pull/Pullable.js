@@ -13,6 +13,7 @@ import {
     Dimensions,
     ActivityIndicator,
     StyleSheet,
+    Platform
 } from 'react-native';
 // const padding = 2; //scrollview与外面容器的距离
 const pullOkMargin = 100; //下拉到ok状态时topindicator距离顶部的距离
@@ -75,9 +76,21 @@ export default class extends Component {
     }
 
     onShouldSetPanResponder(e, gesture) {
-        if (!this.pullable || isUpGesture(gesture.dx, gesture.dy)||!isVerticalGesture(gesture.dx, gesture.dy)) { //不使用pullable,或非向上 或向下手势不响应
-            return false;
+        console.log('this.type',this.type);
+        if(this.type==='View'){
+                if (Platform.OS==='ios'&&(!this.pullable || isUpGesture(gesture.dx, gesture.dy)||!isVerticalGesture(gesture.dx, gesture.dy))) { //不使用pullable,或非向上 或向下手势不响应
+                    return false;
+                }else{
+                    if (Platform.OS==='android'&&(!this.pullable || !isVerticalGesture(gesture.dx, gesture.dy))) { //不使用pullable,或非向上 或向下手势不响应
+                        return false;
+                    }
+                }
+        }else{
+            if (!this.pullable || isUpGesture(gesture.dx, gesture.dy)||!isVerticalGesture(gesture.dx, gesture.dy)) { //不使用pullable,或非向上 或向下手势不响应
+                return false;
+            }
         }
+
         if (!this.state.scrollEnabled) {
             this.lastY = this.state.pullPan.y._value;
             return true;
@@ -89,14 +102,13 @@ export default class extends Component {
     onPanResponderMove(e, gesture) {
         this.gesturePosition = {x: this.defaultXY.x, y: gesture.dy};
         if (isUpGesture(gesture.dx, gesture.dy)) { //向上滑动
-            // if(this.isPullState()) {
-            //     this.resetDefaultXYHandler();
-            // } else if(this.props.onPushing && this.props.onPushing(this.gesturePosition)) {
-            //     // do nothing, handling by this.props.onPushing
-            // } else {
-            //     this.scroll&&this.scroll.scrollTo({animated: true,
-            //         offset: gesture.dy * -1});
-            // }
+            if(this.isPullState()) {
+                this.resetDefaultXYHandler();
+            } else if(this.props.onPushing && this.props.onPushing(this.gesturePosition)) {
+                // do nothing, handling by this.props.onPushing
+            } else {
+                this.scroll&&this.scroll.scrollTo({x:0, y: gesture.dy * -1,animated:true});
+            }
             return;
         } else if (isDownGesture(gesture.dx, gesture.dy)) { //下拉
             this.state.pullPan.setValue({x: this.defaultXY.x, y: this.lastY + gesture.dy / 2});

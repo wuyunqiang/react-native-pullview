@@ -17,7 +17,7 @@ import {
     NetInfo
 } from 'react-native';
 import Pullable from './Pullable';
-import LoadingSpinner from '../LoadingSpinner';
+import LoadingSpinner from '../../components/LoadingSpinner';
 const LoadingState      = 1;    //初始loading页面
 const EmptyState        = 2;    //空页面
 const ErrorState        = 3;    //加载数据错误
@@ -32,6 +32,7 @@ export default class PullList extends Pullable {
         super(props);
         this.currentState = LoadingState;
         this.page = 1;
+        this.type='List';
     }
 
     componentDidMount() {
