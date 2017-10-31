@@ -69,6 +69,7 @@ export default class extends Component {
             onPanResponderRelease: this.onPanResponderRelease.bind(this),
             onPanResponderTerminate: this.onPanResponderRelease.bind(this),
         });
+        this.IOS = (Platform.OS==='ios'?true:false);
         this.setFlag(defaultFlag);
         this.storyTimeKey = "story_time_key";
         this.base64Icon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAABQBAMAAAD8TNiNAAAAJ1BMVEUAAACqqqplZWVnZ2doaGhqampoaGhpaWlnZ2dmZmZlZWVmZmZnZ2duD78kAAAADHRSTlMAA6CYqZOlnI+Kg/B86E+1AAAAhklEQVQ4y+2LvQ3CQAxGLSHEBSg8AAX0jECTnhFosgcjZKr8StE3VHz5EkeRMkF0rzk/P58k9rgOW78j+TE99OoeKpEbCvcPVDJ0OvsJ9bQs6Jxs26h5HCrlr9w8vi8zHphfmI0fcvO/ZXJG8wDzcvDFO2Y/AJj9ADE7gXmlxFMIyVpJ7DECzC9J2EC2ECAAAAAASUVORK5CYII=';
@@ -76,12 +77,11 @@ export default class extends Component {
     }
 
     onShouldSetPanResponder(e, gesture) {
-        console.log('this.type',this.type);
         if(this.type==='View'){
-                if (Platform.OS==='ios'&&(!this.pullable || isUpGesture(gesture.dx, gesture.dy)||!isVerticalGesture(gesture.dx, gesture.dy))) { //不使用pullable,或非向上 或向下手势不响应
+                if (this.IOS&&(!this.pullable || isUpGesture(gesture.dx, gesture.dy)||!isVerticalGesture(gesture.dx, gesture.dy))) { //不使用pullable,或非向上 或向下手势不响应
                     return false;
                 }else{
-                    if (Platform.OS==='android'&&(!this.pullable || !isVerticalGesture(gesture.dx, gesture.dy))) { //不使用pullable,或非向上 或向下手势不响应
+                    if (!this.IOS&&(!this.pullable || !isVerticalGesture(gesture.dx, gesture.dy))) { //不使用pullable,或非向上 或向下手势不响应
                         return false;
                     }
                 }
@@ -151,11 +151,11 @@ export default class extends Component {
         if (e.nativeEvent.contentOffset.y <= 0) {
             // console.log('onScroll e.nativeEvent.contentOffset.y',e.nativeEvent.contentOffset.y);
             // this.scrollEnabled = this.defaultScrollEnabled;
-            this.setState({scrollEnabled: this.defaultScrollEnabled});
+            this.state.scrollEnabled===this.defaultScrollEnabled?"":this.setState({scrollEnabled: this.defaultScrollEnabled});
         } else if(!this.isPullState()) {
             // console.log('onScroll e.nativeEvent.contentOffset.y',e.nativeEvent.contentOffset.y);
             // this.scrollEnabled = true;
-            this.setState({scrollEnabled: true});
+            this.state.scrollEnabled?"":this.setState({scrollEnabled: true});
         }
     }
 
