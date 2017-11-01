@@ -67,6 +67,7 @@ export default class extends Pullable {
         console.log('contentWidth',contentWidth);
         console.log('contentHeight',contentHeight);
         console.log('Height',HEIGHT);
+        this.type='View';
         if(contentHeight<HEIGHT){
             this.OverScreen = false;
         }else{
