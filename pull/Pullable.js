@@ -77,6 +77,7 @@ export default class extends Component {
     }
 
     onShouldSetPanResponder(e, gesture) {
+        console.log('this.type',this.type)
         if(this.type==='View'){
                 if (this.IOS&&(!this.pullable || isUpGesture(gesture.dx, gesture.dy)||!isVerticalGesture(gesture.dx, gesture.dy))) { //不使用pullable,或非向上 或向下手势不响应
                     return false;
@@ -86,7 +87,7 @@ export default class extends Component {
                     }
                 }
         }else{
-            if (!this.pullable || isUpGesture(gesture.dx, gesture.dy)||!isVerticalGesture(gesture.dx, gesture.dy)) { //不使用pullable,或非向上 或向下手势不响应
+            if (!this.pullable || !isVerticalGesture(gesture.dx, gesture.dy)) { //不使用pullable,或非向上 或向下手势不响应
                 return false;
             }
         }
@@ -107,7 +108,12 @@ export default class extends Component {
             } else if(this.props.onPushing && this.props.onPushing(this.gesturePosition)) {
                 // do nothing, handling by this.props.onPushing
             } else {
-                this.scroll&&this.scroll.scrollTo({x:0, y: gesture.dy * -1,animated:true});
+                if(this.type==='View'){
+                    this.scroll&&this.scroll.scrollTo({x:0, y: gesture.dy * -1,animated:true});
+                }else{
+                    this.scroll&&this.scroll.scrollToOffset({animated: true,
+                        offset: gesture.dy * -1});
+                }
             }
             return;
         } else if (isDownGesture(gesture.dx, gesture.dy)) { //下拉

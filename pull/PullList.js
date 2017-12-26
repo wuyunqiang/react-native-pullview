@@ -213,6 +213,7 @@ export default class PullList extends Pullable {
                 style={{flex:1}}
                 ref={(c) => {this.scroll = c;}}
                       onScroll={this.onScroll}
+                      scrollEnabled={this.state.scrollEnabled}
                       refreshing={false}
                       keyExtractor={(item, index) => {return index}}
                       onEndReachedThreshold={1}
@@ -294,6 +295,7 @@ export default class PullList extends Pullable {
         }else if(this.currentState === ErrorState){
             return this.props.renderError || this._renderError();
         }else{
+            this.type='List';
             return this._renderList()
         }
     }
