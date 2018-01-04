@@ -223,11 +223,7 @@ export default class PullList extends Pullable {
                       updateCellsBatchingPeriod={1}
                       maxToRenderPerBatch={10}
                       disableVirtualization={false}
-                      viewabilityConfig={{
-                          minimumViewTime: 1,
-                          viewAreaCoveragePercentThreshold: 0,
-                          waitForInteractions: true
-                      }}
+
                       {...this.props}
                 ItemSeparatorComponent={this.renderSeparatorView}
                 onEndReached = {this.loadMore}/>
