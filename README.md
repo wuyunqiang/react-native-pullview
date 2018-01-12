@@ -1,11 +1,14 @@
 # PullView
 scrollview&amp;&amp;FlatList Pull refresh and loadmore
 
-参考react-native-pull和RefreshListDemo。
-android&&ios都可以使用。
+参考react-native-pull和RefreshListDemo。<br>
+android&&ios都可以使用。<br>
+使用方法参考：[AndroidToRN](https://github.com/wuyunqiang/AndroidToRN)<br>
 
-效果图：
+效果图：<br>
  ![image](https://github.com/wuyunqiang/PullView/raw/master/Images/pullview.gif)
+ 
+ ![pullview.gif](http://upload-images.jianshu.io/upload_images/3353755-2d90319bf4a5e3a8.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 使用方式直接拷贝到文件目录下，导入组件即可：
 pulllist=>使用flatlist
