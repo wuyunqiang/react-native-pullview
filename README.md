@@ -8,7 +8,7 @@ android&&ios都可以使用。<br>
 效果图：<br>
  ![image](https://github.com/wuyunqiang/PullView/raw/master/Images/pullview.gif)
  
- ![pullview.gif](http://upload-images.jianshu.io/upload_images/3353755-2d90319bf4a5e3a8.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![pullviewtoutiao.gif](http://upload-images.jianshu.io/upload_images/3353755-696b57268d529a57.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 使用方式直接拷贝到文件目录下，导入组件即可：
 pulllist=>使用flatlist
