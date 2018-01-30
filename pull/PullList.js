@@ -17,7 +17,7 @@ import {
     NetInfo
 } from 'react-native';
 import Pullable from './Pullable';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import LoadingSpinner from './LoadingSpinner';
 const LoadingState      = 1;    //初始loading页面
 const EmptyState        = 2;    //空页面
 const ErrorState        = 3;    //加载数据错误
@@ -113,17 +113,7 @@ export default class PullList extends Pullable {
         })
     };
 
-    /**
-     * 对外提供API, 加载数据出错
-     */
-    setError = ()=>{
-        if(this.state.data == null || this.state.data.length == 0){
-            this.currentState = ErrorState;
-        }else {
-            this.currentState = NoMoreErrorState;
-        };
-        // this.forceUpdate();
-    };
+
 
     /**
      * 对外提供API, 出错重新加载数据
@@ -166,7 +156,7 @@ export default class PullList extends Pullable {
     _renderEmpty = ()=>{
         console.log('没有数据');
         return (
-            <View style={[styles.contain,{justifyContent:'flex-start',marginTop:SCALE(242)}]}>
+            <View style={[styles.contain,{justifyContent:'center'}]}>
                 <TouchableOpacity onPress={this.reloadData}>
                     <View style={{justifyContent:'center', alignItems:'center'}}>
                     <Image style={{width:SCALE(323),height:SCALE(267)}} source={AppImages.List.nodata}/>
@@ -288,8 +278,6 @@ export default class PullList extends Pullable {
                 return this._renderEmpty();
             }
             // return this.props.renderEmpty || this._renderEmpty;
-        }else if(this.currentState === ErrorState){
-            return this.props.renderError || this._renderError();
         }else{
             this.type='List';
             return this._renderList()

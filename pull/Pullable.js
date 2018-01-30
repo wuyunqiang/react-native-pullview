@@ -18,7 +18,7 @@ import {
 // const padding = 2; //scrollview与外面容器的距离
 const pullOkMargin = 100; //下拉到ok状态时topindicator距离顶部的距离
 const defaultDuration = 300;
-const defaultTopIndicatorHeight = 120; //顶部刷新指示器的高度
+const defaultTopIndicatorHeight = 80; //顶部刷新指示器的高度
 const defaultFlag = {pulling: false, pullok: false, pullrelease: false};
 const flagPulling = {pulling: true, pullok: false, pullrelease: false};
 const flagPullok = {pulling: false, pullok: true, pullrelease: false};
@@ -45,6 +45,7 @@ export default class extends Component {
         this.pullOkMargin = this.props.pullOkMargin ? this.props.pullOkMargin : pullOkMargin;
         this.duration = this.props.duration ? this.props.duration : defaultDuration;
         this.state = Object.assign({}, props, {
+            arrowAngle: new Animated.Value(0),
             pullPan: new Animated.ValueXY(this.defaultXY),
             scrollEnabled: this.defaultScrollEnabled,
             flag: defaultFlag,
@@ -55,11 +56,14 @@ export default class extends Component {
         this.gesturePosition = {x: 0, y: 0};
         this.onScroll = this.onScroll.bind(this);
         this.onLayout = this.onLayout.bind(this);
+        this.BeginRefresh = this.BeginRefresh.bind(this);
+        this.StopRefresh = this.StopRefresh.bind(this);
         this.isPullState = this.isPullState.bind(this);
         this.resetDefaultXYHandler = this.resetDefaultXYHandler.bind(this);
         this.resolveHandler = this.resolveHandler.bind(this);
         this.setFlag = this.setFlag.bind(this);
         this.renderTopIndicator = this.renderTopIndicator.bind(this);
+        this.renderSpinner = this.renderSpinner.bind(this);
         this.defaultTopIndicatorRender = this.defaultTopIndicatorRender.bind(this);
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: this.onShouldSetPanResponder.bind(this),
@@ -73,11 +77,9 @@ export default class extends Component {
         this.setFlag(defaultFlag);
         this.storyTimeKey = "story_time_key";
         this.base64Icon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAABQBAMAAAD8TNiNAAAAJ1BMVEUAAACqqqplZWVnZ2doaGhqampoaGhpaWlnZ2dmZmZlZWVmZmZnZ2duD78kAAAADHRSTlMAA6CYqZOlnI+Kg/B86E+1AAAAhklEQVQ4y+2LvQ3CQAxGLSHEBSg8AAX0jECTnhFosgcjZKr8StE3VHz5EkeRMkF0rzk/P58k9rgOW78j+TE99OoeKpEbCvcPVDJ0OvsJ9bQs6Jxs26h5HCrlr9w8vi8zHphfmI0fcvO/ZXJG8wDzcvDFO2Y/AJj9ADE7gXmlxFMIyVpJ7DECzC9J2EC2ECAAAAAASUVORK5CYII=';
-
     }
 
     onShouldSetPanResponder(e, gesture) {
-        console.log('this.type',this.type)
         if(this.type==='View'){
                 if (this.IOS&&(!this.pullable || isUpGesture(gesture.dx, gesture.dy)||!isVerticalGesture(gesture.dx, gesture.dy))) { //不使用pullable,或非向上 或向下手势不响应
                     return false;
@@ -98,6 +100,17 @@ export default class extends Component {
         } else {
             return false;
         }
+    }
+
+    BeginRefresh(){
+        console.log('BeginRefresh');
+        this.state.pullPan.setValue({x: this.defaultXY.x, y: this.topIndicatorHeight});
+        this.setFlag(flagPullrelease);
+    }
+
+    StopRefresh(){
+        console.log('StopRefresh');
+        this.resetDefaultXYHandler();
     }
 
     onPanResponderMove(e, gesture) {
@@ -172,6 +185,7 @@ export default class extends Component {
     setFlag(flag) {
         if (this.flag != flag) {
             this.flag = flag;
+            console.log('设置inderTop',this.flag);
             this.renderTopIndicator();
         }
     }
@@ -291,58 +305,75 @@ export default class extends Component {
     //         </View>
     //     );
     // }
-    defaultTopIndicatorRender(pulling, pullok, pullrelease, gesturePosition) {
 
-        this.transform = [{rotate:this.state.prArrowDeg.interpolate({
-            inputRange: [0,1],
-            outputRange: ['0deg', '-180deg']
-        })}];
+    renderSpinner(status) {
+        if (status === "txtPullrelease") {
+            return (
+                <ActivityIndicator style={{marginRight: 10}}/>
+            )
+        }
+        return (
+            <Animated.Image
+                source={{uri:this.base64Icon}}
+                resizeMode={'contain'}
+                style={[defaultHeaderStyles.arrow,
+                    this.props.arrowImageStyle,
+                    {
+                        transform: [{
+                            rotateX: this.state.arrowAngle.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: ['0deg', '-180deg']
+                            })
+                        }]
+                    }]}
+            />
+        )
+    }
+
+    defaultTopIndicatorRender(pulling, pullok, pullrelease, gesturePosition) {
+        console.log('pulling, pullok, pullrelease',pulling, pullok, pullrelease);
         if (pulling) {
-            Animated.timing(this.state.prArrowDeg, {
+            Animated.timing(this.state.arrowAngle, {
                 toValue: 0,
-                duration: 100,
+                duration: 50,
                 easing: Easing.inOut(Easing.quad)
             }).start();
             this.txtPulling && this.txtPulling.setNativeProps({style: styles.show});
             this.txtPullok && this.txtPullok.setNativeProps({style: styles.hide});
             this.txtPullrelease && this.txtPullrelease.setNativeProps({style: styles.hide});
         } else if (pullok) {
-            Animated.timing(this.state.prArrowDeg, {
+            Animated.timing(this.state.arrowAngle, {
                 toValue: 1,
-                duration: 100,
+                duration: 50,
                 easing: Easing.inOut(Easing.quad)
             }).start();
             this.txtPulling && this.txtPulling.setNativeProps({style: styles.hide});
             this.txtPullok && this.txtPullok.setNativeProps({style: styles.show});
             this.txtPullrelease && this.txtPullrelease.setNativeProps({style: styles.hide});
         } else if (pullrelease) {
+            Animated.timing(this.state.arrowAngle, {
+                toValue: 1,
+                duration: 50,
+                easing: Easing.inOut(Easing.quad)
+            }).start();
             this.txtPulling && this.txtPulling.setNativeProps({style: styles.hide});
             this.txtPullok && this.txtPullok.setNativeProps({style: styles.hide});
             this.txtPullrelease && this.txtPullrelease.setNativeProps({style: styles.show});
         }
         return (
-            <View ref={(c) => {this.PullAll = c;}} style={styles.headWrap}>
+            <View ref={(c) => {this.PullAll = c;}} style={defaultHeaderStyles.header}>
                 <View ref={(c) => {this.txtPulling = c;}} style={styles.hide}>
-                    <Animated.Image style={[styles.arrow,{transform:this.transform}]}
-                                    resizeMode={'contain'}
-                                    source={{uri: this.base64Icon}}/>
+                    {this.renderSpinner("txtPulling")}
                     <Text style={styles.arrowText}>{"下拉可以刷新"}</Text>
                 </View>
-
                 <View ref={(c) => {this.txtPullok = c;}} style={styles.hide}>
-
-                    <Animated.Image style={[styles.arrow,{transform:this.transform}]}
-                                    resizeMode={'contain'}
-                                    source={{uri: this.base64Icon}}/>
+                    {this.renderSpinner("txtPullok")}
                     <Text style={styles.arrowText}>{"释放立即刷新"}</Text>
                 </View>
-
                 <View ref={(c) => {this.txtPullrelease = c;}} style={styles.hide}>
-                    <ActivityIndicator size="small" color="gray" style={styles.arrow}/>
+                    {this.renderSpinner("txtPullrelease")}
                     <Text style={styles.arrowText}>{"刷新数据中..."}</Text>
                 </View>
-
-                {/*<Text>下拉刷新时间:  {dateFormat(new Date().getTime(),'yyyy-MM-dd hh:mm')}</Text>*/}
             </View>
         );
     }
@@ -399,3 +430,29 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     }
 });
+    const defaultHeaderStyles = StyleSheet.create({
+        header: {
+        height: 80,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+        status: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+        arrow: {
+        width: 23,
+        height: 23,
+        marginRight: 10,
+        opacity: 0.4
+    },
+        statusTitle: {
+        fontSize: 13,
+        color: '#333333'
+    },
+        date: {
+        fontSize: 11,
+        color: '#333333',
+        marginTop: 5
+    }
+    });

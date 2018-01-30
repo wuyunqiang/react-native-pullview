@@ -1,8 +1,6 @@
 import React, {Component} from "react";
 import {Dimensions, ActivityIndicator,View, Text} from "react-native";
-
 const {width, height} = Dimensions.get('window');
-
 export default class LoadingSpinner extends Component {
 
     static defaultProps = {
@@ -33,7 +31,12 @@ export default class LoadingSpinner extends Component {
             )
         }else if(this.props.type==='allLoaded'){
             return (<View style={styles.allLoaded}><Text style={styles.statusText}>没有更多数据了</Text></View>)
-        } else{
+        } else if(this.props.type==='home'){
+            return (
+                <ActivityIndicator color={'#FF6347'}/>
+            );
+
+        }else{
             return (
                 <View style={{
                     position:'absolute',
