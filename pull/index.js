@@ -66,13 +66,7 @@ const NoMoreErrorState  = 7;    //加载更多出错
     {/*Android_Native={true}*/}
     {/*onPullRelease={this.onPullRelease}*/}
     {/*style={styles.container}>*/}
-    {/*<HomeBanner*/}
-        {/*userinfo={this.state.userinfo}*/}
-        {/*unReadAmount={this.state.unReadAmount}*/}
-        {/*navigation={this.props.navigation}*/}
-        {/*navigate={(...params) => super.navigate(...params)}/>*/}
-    {/*<NewsList navigate={(...params) => super.navigate(...params)}/>*/}
-    {/*<List navigate={(...params) => super.navigate(...params)}/>*/}
+    /*other views*/
 {/*</PullScroll>*/}
 
 /**
