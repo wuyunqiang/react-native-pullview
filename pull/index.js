@@ -78,7 +78,7 @@ const NoMoreErrorState  = 7;    //加载更多出错
 /**
  * PullScroll => scrollview
  * PullList =>flatlist
- * Key 每一个实例唯一不能重复
+ * Key 每一个实例唯一不能重复（如果Android_Native=true Key必须存在否则不能下拉刷新）
  * Android_Native 是否使用android原生下拉刷新组件 true开启
  * ****/
 class Pull extends Component {
