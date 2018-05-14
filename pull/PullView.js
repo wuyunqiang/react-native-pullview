@@ -84,6 +84,7 @@ export default class extends Pullable {
                 scrollEnabled={Platform.OS==='android'?this.state.scrollEnabled:true}
                 scrollEventThrottle={16}
                 onContentSizeChange = {this.onContentSizeChange}
+                {...this.props}
             >
                 {this.props.children}
             </ScrollView>

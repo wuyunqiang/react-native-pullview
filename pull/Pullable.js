@@ -44,7 +44,7 @@ export default class extends Component {
         this.defaultXY = {x: 0, y: this.topIndicatorHeight * -1};
         this.pullOkMargin = this.props.pullOkMargin ? this.props.pullOkMargin : pullOkMargin;
         this.duration = this.props.duration ? this.props.duration : defaultDuration;
-        this.state = Object.assign({}, props, {
+        this.BaseState = Object.assign({}, props, {
             arrowAngle: new Animated.Value(0),
             pullPan: new Animated.ValueXY(this.defaultXY),
             scrollEnabled: this.defaultScrollEnabled,
@@ -104,8 +104,9 @@ export default class extends Component {
 
     BeginRefresh(){
         console.log('BeginRefresh');
-        this.state.pullPan.setValue({x: this.defaultXY.x, y: this.topIndicatorHeight});
         this.setFlag(flagPullrelease);
+        this.state.pullPan.setValue({x: this.defaultXY.x, y: this.topIndicatorHeight});
+
     }
 
     StopRefresh(){
@@ -220,7 +221,7 @@ export default class extends Component {
     }
 
     render() {
-        let refreshControl = this.props.refreshControl;
+       // let refreshControl = this.props.refreshControl;
         return (
             <View style={[styles.wrap, this.props.style]} onLayout={this.onLayout}>
                 <Animated.View ref={(c) => {this.ani = c;}}
@@ -229,7 +230,7 @@ export default class extends Component {
                     <View ref={(c) => {this.scrollContainer = c;}}
                           {...this.panResponder.panHandlers}
                           style={{width: this.state.width, height: this.state.height}}>
-                        {this.getScrollable(refreshControl)}
+                        {this.getScrollable()}
                     </View>
                 </Animated.View>
             </View>

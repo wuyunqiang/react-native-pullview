@@ -66,13 +66,19 @@ const NoMoreErrorState  = 7;    //加载更多出错
     {/*Android_Native={true}*/}
     {/*onPullRelease={this.onPullRelease}*/}
     {/*style={styles.container}>*/}
-    /*other views*/
+    {/*<HomeBanner*/}
+        {/*userinfo={this.state.userinfo}*/}
+        {/*unReadAmount={this.state.unReadAmount}*/}
+        {/*navigation={this.props.navigation}*/}
+        {/*navigate={(...params) => super.navigate(...params)}/>*/}
+    {/*<NewsList navigate={(...params) => super.navigate(...params)}/>*/}
+    {/*<List navigate={(...params) => super.navigate(...params)}/>*/}
 {/*</PullScroll>*/}
 
 /**
  * PullScroll => scrollview
  * PullList =>flatlist
- * Key 每一个实例唯一不能重复（如果Android_Native=true Key必须存在否则不能下拉刷新）
+ * Key 每一个实例唯一不能重复
  * Android_Native 是否使用android原生下拉刷新组件 true开启
  * ****/
 class Pull extends Component {
@@ -84,7 +90,7 @@ class Pull extends Component {
 
         };
         this.currentState=LoadingState;
-        this.page = 1;
+        this.page = 0;
         this.type='List';
     }
 
@@ -260,8 +266,9 @@ class Pull extends Component {
         if(this.currentState==NoMoreState){
             return;
         }
-        this.props.onEndReached&&this.props.onEndReached(this.getPage());
         this.page++;
+        this.props.onEndReached&&this.props.onEndReached(this.getPage());
+
     }
 
     /**
