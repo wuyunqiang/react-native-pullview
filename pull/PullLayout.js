@@ -27,20 +27,30 @@ export default class App extends Component {
 
     //数据获取后回调 刷新结束
     finishRefresh = (key)=>{
-        console.log("结束下拉"+key);
+        Log("结束下拉"+key);
         UIManager.dispatchViewManagerCommand(ReactNative.findNodeHandle(this),
             UIManager.PullLayout.Commands.FinishRefresh,[key])
     };
 
+    resolve = ()=>{
+        this.finishRefresh(this.props.Key);
+    };
+
+    onPullRelease = ()=>{
+        this.props.onPullRelease(this.resolve)
+    };
+
     render() {
+        console.log('PullLayout this.props',this.props)
         return (
             <PullLayout
+                method={this.props.method?this.props.method:1}
                 ref = {(pull)=>{this.pullLayout = pull}}
                 style={[{flex: 1,backgroundColor:'white',},this.props.style]}
                 EnableOverScrollDrag = {true}
                 EnableOverScrollBounce = {false}
                 DisableContentWhenRefresh = {false}
-                onRefreshReleased={this.props.onRefreshReleased}
+                onRefreshReleased={this.onPullRelease}
                 {...this.props}
             >
                 <View style={{flex: 1}}>
@@ -54,6 +64,7 @@ export default class App extends Component {
 PullLayout.propTypes = {
     ...View.propTypes,
     Key:PropTypes.string.isRequired,//必须 否则监听回调可能无法被调用
+    Method:PropTypes.number.isRequired,//使用哪种方式发送消息 1实例方式 2广播消息的方式 Key针对第二种方式
     onRefreshReleased:PropTypes.func,//网络请求加载数据
     EnableOverScrollDrag:PropTypes.bool,//设置是否启用越界回弹
     EnableOverScrollBounce:PropTypes.bool,//设置是否启用越界拖动（仿苹果效果）

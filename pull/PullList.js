@@ -70,7 +70,7 @@ export default class PullList extends Pullable {
      * 刷新
      */
     refresh = () => {
-        console.log('zhixngzheli');
+        Log('zhixngzheli');
         if (this.mounted) {
             this.setPage(1);
             this.props.onPullRelease&&this.props.onPullRelease(this.resolveHandler);
@@ -94,7 +94,7 @@ export default class PullList extends Pullable {
      */
     setData = (_data)=>{
         this.setPage(1);
-        console.log('下拉刷新设置数据 setData');
+        Log('下拉刷新设置数据 setData');
         if (_data.length == 0){
             this.currentState = EmptyState;
         }else{
@@ -140,7 +140,7 @@ export default class PullList extends Pullable {
         this.page++;
         this.props.onEndReached&&this.props.onEndReached(this.getPage());
 
-        console.log('this.page',this.page)
+        Log('this.page',this.page)
     };
 
     /**
@@ -163,7 +163,7 @@ export default class PullList extends Pullable {
      * 加载 空页面
      */
     _renderEmpty = ()=>{
-        console.log('没有数据');
+        Log('没有数据');
         return (
             <View style={[styles.contain,{justifyContent:'center'}]}>
                 <TouchableOpacity onPress={this.reloadData}>

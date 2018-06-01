@@ -50,6 +50,12 @@ Demo3:
 export default class extends Pullable {
     constructor(props) {
         super(props);
+        this.state = {
+            ...this.BaseState,
+        };
+        const defaultFlag = {pulling: false, pullok: false, pullrelease: false};
+        this.setFlag(defaultFlag);
+        Log("this.state",this.state)
         this.scrollTo = this.scrollTo.bind(this);
         this.scrollToEnd = this.scrollToEnd.bind(this);
         this.type='View';
@@ -64,9 +70,9 @@ export default class extends Pullable {
     }
 
     onContentSizeChange = (contentWidth, contentHeight)=>{
-        console.log('contentWidth',contentWidth);
-        console.log('contentHeight',contentHeight);
-        console.log('Height',HEIGHT);
+        Log('contentWidth',contentWidth);
+        Log('contentHeight',contentHeight);
+        Log('Height',HEIGHT);
         this.type='View';
         if(contentHeight<HEIGHT){
             this.OverScreen = false;

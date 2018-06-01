@@ -157,12 +157,13 @@ class Pull extends Component {
              this.PullListView&&this.PullListView.refresh();
              return;
         }
-        console.log('zhixngzheli');
+        Log('zhixngzheli');
         this.setPage(1);
         this.props.onPullRelease&&this.props.onPullRelease(this.resolveHandler);
     };
 
     resolveHandler = ()=>{
+        Log('使用广播方式传送数据')
         this.pullLayout&&this.pullLayout.finishRefresh(this.props.Key);
     }
 
@@ -199,7 +200,7 @@ class Pull extends Component {
             return;
         }
         this.setPage(1);
-        console.log('setData');
+        Log('setData');
         if (_data.length == 0){
             this.currentState=EmptyState,
             this.setState({
@@ -281,7 +282,7 @@ class Pull extends Component {
         }
         this.currentState=MoreState;
         this.page++;
-        console.log('this.page',this.page)
+        Log('this.page',this.page)
         this.props.onEndReached&&this.props.onEndReached(this.getPage());
     };
 
@@ -311,7 +312,7 @@ class Pull extends Component {
         if(Platform.OS=='ios'||!this.props.Android_Native){
             return this.PullListView&&this.PullListView._renderEmpty()
         }
-        console.log('没有数据');
+        Log('没有数据');
         return (
             <ScrollView style={{flex:1}}>
             <View style={[styles.contain,{justifyContent:'center'}]}>
@@ -427,7 +428,7 @@ class Pull extends Component {
         if(Platform.OS=='ios'||!this.props.Android_Native){
             return this.PullListView&&this.PullListView._renderFoot()
         }
-        console.log('执行了这里ListFooterComponent')
+        Log('执行了这里ListFooterComponent')
         if (this.currentState === NoMoreState){
             return this.props.renderNoMore?this.props.renderNoMore():this.renderNoMore();
         }else if(this.currentState === NoMoreErrorState){
@@ -498,6 +499,7 @@ class PullScroll extends Component{
     };
 
     resolveHandler = ()=>{
+        Log('使用广播方式传送数据')
         this.pullLayout&&this.pullLayout.finishRefresh(this.props.Key);
     }
 
@@ -510,16 +512,17 @@ class PullScroll extends Component{
 
     render(){
         if (Platform.OS == 'android' && this.props.Android_Native) {
+            console.log('pull index this.props.children',this.props.children)
             return (<PullLayout
                 Key={this.props.Key}
                 ref={(pull) => {
                     this.pullLayout = pull
                 }}
-                style={{flex: 1, backgroundColor: 'white',}}>
-                <ScrollView style = {{flex:1}}>
+                style={{flex: 1, backgroundColor: 'white',}}
+                {...this.props}>
+                <ScrollView {...this.props}>
                     {this.props.children}
                 </ScrollView>
-
             </PullLayout>)
         }
         return (<PullView
