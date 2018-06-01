@@ -8,17 +8,16 @@ android可以使用原生的下拉刷新效果会更好 如下使用：<br>
 /**
  * PullScroll => scrollview
  * PullList =>flatlist
- * Key 每一个实例唯一不能重复
  * Android_Native 是否使用android原生下拉刷新组件 true开启
  * ****/
  
 如果开启原生属性 需要android引入原生模块<br>
 下拉刷新数据传送的方式有两种<br>
-### method:
-1 view实例的方式 Key有没有都可以 也不需要js监听事件 只需要复写onPullRelease即可以使用
+### method:1
+view实例的方式 Key有没有都可以 也不需要js监听事件 只需要复写onPullRelease即可以使用
 debug测试可以使用但是在release模式下会有收不到消息的情况，官方原因并不稳定<br>
 ### method:2 
-原生广播的方式想rn发送数据 因此Key必须有切唯一不重复 需要rn端写事件监听 稳定暂时未发现bug<br>
+原生广播的方式想rn发送数据 ### 因此Key必须有切唯一不重复 ### 需要rn端写事件监听 稳定暂时未发现bug<br>
 具体建议参考：[RNApp](https://github.com/wuyunqiang/RNApp)<br>
 ![iosrnapp.gif](https://upload-images.jianshu.io/upload_images/3353755-e6a3dd8b7f3f54e3.gif?imageMogr2/auto-orient/strip)
 ![androidgif.gif](https://upload-images.jianshu.io/upload_images/3353755-6dcb27c69b2b345d.gif?imageMogr2/auto-orient/strip)
